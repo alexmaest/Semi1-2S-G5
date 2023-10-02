@@ -6,6 +6,7 @@ const morgan = require('morgan');
 
 const mainRoute = require('./routers/mainRoute');
 const loginRoute = require('./routers/loginRoute');
+const publicationRoute = require('./routers/publicationRoute');
 //const registerRoute = require('./routers/registerRoute');
 //const adminRoute = require('./routers/adminRoute');
 //const userRoute = require('./routers/userRoute');
@@ -19,6 +20,7 @@ app.use(cors());
 
 app.use('/', mainRoute);
 app.use('/login', loginRoute);
+app.use('/publication', publicationRoute);
 //app.use('/register', registerRoute);
 //app.use('/admin', adminRoute);
 //app.use('/user', userRoute);
