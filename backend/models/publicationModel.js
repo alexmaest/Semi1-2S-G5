@@ -39,26 +39,7 @@ class publicationModel {
       );
     });
   }
-
-  translate(language) {
-    return new Promise((resolve, reject) => {
-      const params = {
-        Text: this.description,
-        SourceLanguageCode: "auto",
-        TargetLanguageCode: language,
-      };
-
-      translate
-        .send(new TranslateTextCommand(params))
-        .then((data) => {
-          resolve(data);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
-  }
-
+  
   getAllPost() {
     return new Promise((resolve, reject) => {
       const query =
