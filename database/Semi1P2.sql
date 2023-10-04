@@ -46,3 +46,36 @@ id_publicacion int,
 foreign key (id_publicacion) references PUBLICACION(id),
 foreign key (id_usuario) references USUARIO(id)
 );
+
+create table FILTRO(
+id int primary key auto_increment,
+nombre varchar(50) unique
+);
+
+create table PUBLICACION_FILTRO(
+id int primary key auto_increment,
+id_publicacion int, 
+id_filtro int,
+foreign key (id_publicacion) references PUBLICACION(id),
+foreign key (id_filtro) references FILTRO(id)
+);
+
+DROP PROCEDURE IF EXISTS InsertarFiltro;
+
+DELIMITER //
+CREATE PROCEDURE InsertarFiltro (nombre_param VARCHAR(50), id_param INT) 
+BEGIN
+    DECLARE filtro_id INT;
+    
+    -- Buscar si el filtro ya existe
+    SELECT id INTO filtro_id FROM FILTRO WHERE nombre = nombre_param;
+    
+    -- Si no existe, insertar el nuevo filtro
+    IF filtro_id IS NULL THEN
+        INSERT INTO FILTRO (nombre) VALUES (nombre_param);
+        SET filtro_id = LAST_INSERT_ID();
+    END IF;
+    
+    INSERT INTO PUBLICACION_FILTRO (id_publicacion, id_filtro) VALUES (id_param, filtro_id);	
+END //
+DELIMITER ;

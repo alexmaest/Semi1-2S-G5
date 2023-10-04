@@ -14,21 +14,20 @@ const config = {
 
 const translate = new TranslateClient(config);
 
-class publicationModel {
-  constructor(description, image, date, id_user) {
-    this.description = description;
-    this.image = image;
-    this.date = date;
+class commentModel {
+  constructor(content, id_user, id_post) {
+    this.content = content;
     this.id_user = id_user;
+    this.id_post = id_post;
   }
 
   save() {
     return new Promise((resolve, reject) => {
       const query =
-        "INSERT INTO PUBLICACION (descripcion, imagen, fecha, id_usuario) VALUES (?, ?, ?, ?);";
+        "INSERT INTO COMENTARIO (contenido, id_usuario, id_publicacion) VALUES (?, ?, ?);";
       db.connection.query(
         query,
-        [this.description, this.image, this.date, this.id_user],
+        [this.content, this.id_user, this.id_post],
         (err, result) => {
           if (err) {
             reject(err);
@@ -59,25 +58,11 @@ class publicationModel {
     });
   }
 
-  getAllPost() {
+  getCommentPost() {
     return new Promise((resolve, reject) => {
       const query =
-        "SELECT U.nombre, U.apellido, P.* FROM PUBLICACION P INNER JOIN USUARIO U ON U.id = P.id_usuario;";
-      db.connection.query(query, (err, result) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(result);
-        }
-      });
-    });
-  }
-
-  getUserPosts() {
-    return new Promise((resolve, reject) => {
-      const query =
-        "SELECT U.nombre, U.apellido, P.* FROM PUBLICACION P INNER JOIN USUARIO U ON U.id = P.id_usuario WHERE U.id = ?;";
-      db.connection.query(query, [this.id_user], (err, result) => {
+        "SELECT U.nombre, U.apellido, U.correo, C.* FROM COMENTARIO C INNER JOIN USUARIO U ON U.id = C.id_usuario WHERE C.id_publicacion = ?;";
+      db.connection.query(query, [this.id_post], (err, result) => {
         if (err) {
           reject(err);
         } else {
@@ -88,4 +73,4 @@ class publicationModel {
   }
 }
 
-module.exports = publicationModel;
+module.exports = commentModel;
