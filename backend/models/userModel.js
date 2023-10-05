@@ -1,20 +1,29 @@
 const db = require('../database');
+const bcrypt = require('bcrypt');
 
 class userModel {
-  constructor(id_user, firstName, lastName, email, password, birthday, profilePhoto) {
+  constructor(id_user, firstName, lastName, dpi, email, password, profilePhoto) {
     this.id_user = id_user;
     this.firstName = firstName;
     this.lastName = lastName;
+    this.dpi = dpi;
     this.email = email;
     this.password = password;
-    this.birthday = birthday;
     this.profilePhoto = profilePhoto;
   }
 
   save() {
     return new Promise((resolve, reject) => {
-      const query = 'INSERT INTO user (name, password) VALUES (?, ?);';
-      db.connection.query(query, [this.firstName, this.password], (err, result) => {
+      const query = 'INSERT INTO USUARIO (id, nombre, apellido, dpi, correo, psw, foto) VALUES (?, ?, ?, ?, ?, ?, ?)';
+      db.connection.query(query, [
+        this.id_user,
+        this.firstName,
+        this.lastName,
+        this.dpi,
+        this.email,
+        this.password,
+        this.profilePhoto
+      ], (err, result) => {
         if (err) {
           reject(err);
         } else {
@@ -61,6 +70,33 @@ class userModel {
         }
       });
     });
+  }
+
+  getByEmail() {
+    return new Promise((resolve, reject) => {
+      const query = 'SELECT * FROM USUARIO WHERE correo = ?';
+      db.connection.query(query, [this.email], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          if (results.length > 0) {
+            resolve(results[0]);
+          } else {
+            resolve(null);
+          }
+        }
+      });
+    });
+  }
+
+  generateHash() {
+    const saltRounds = 10;
+    const hash = bcrypt.hashSync(this.password, saltRounds);
+    return hash;
+  }
+
+  compareHash(hashedPassword) {
+    return bcrypt.compareSync(this.password, hashedPassword);
   }
 }
 
