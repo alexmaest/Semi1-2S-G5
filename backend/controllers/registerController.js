@@ -8,6 +8,7 @@ class registerController {
         try {
             const { firstName, lastName, dpi, email, password, profilePhoto } = req.body;
             const user = new userModel(null, firstName, lastName, dpi, email, password, null);
+            const userByEmail = await user.getByEmail();
             if (userByEmail) {
                 res.status(501).json({ message: 'Account with that email already exist' });
             } else {

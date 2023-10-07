@@ -1,7 +1,7 @@
 const db = require("../database");
 const {
   TranslateClient,
-  TranslateTextCommand
+  TranslateTextCommand,
 } = require("@aws-sdk/client-translate");
 
 const config = {
@@ -25,7 +25,7 @@ class publicationModel {
   save() {
     return new Promise((resolve, reject) => {
       const query =
-        "INSERT INTO publicacion (descripcion, imagen, fecha, id_usuario) VALUES (?, ?, ?, ?);";
+        "INSERT INTO PUBLICACION (descripcion, imagen, fecha, id_usuario) VALUES (?, ?, ?, ?);";
       db.connection.query(
         query,
         [this.description, this.image, this.date, this.id_user],
@@ -39,23 +39,32 @@ class publicationModel {
       );
     });
   }
-
-  translate(language) {
+  
+  getAllPost() {
     return new Promise((resolve, reject) => {
-      const params = {
-        Text: this.description,
-        SourceLanguageCode: "auto",
-        TargetLanguageCode: language,
-      };
-
-      translate
-        .send(new TranslateTextCommand(params))
-        .then((data) => {
-          resolve(data);
-        })
-        .catch((err) => {
+      const query =
+        "SELECT U.nombre, U.apellido, P.* FROM PUBLICACION P INNER JOIN USUARIO U ON U.id = P.id_usuario;";
+      db.connection.query(query, (err, result) => {
+        if (err) {
           reject(err);
-        });
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  getUserPosts() {
+    return new Promise((resolve, reject) => {
+      const query =
+        "SELECT U.nombre, U.apellido, P.* FROM PUBLICACION P INNER JOIN USUARIO U ON U.id = P.id_usuario WHERE U.id = ?;";
+      db.connection.query(query, [this.id_user], (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
     });
   }
 }
