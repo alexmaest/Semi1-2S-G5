@@ -27,7 +27,7 @@ class filterModel {
       INNER JOIN USUARIO u ON u.id = p.id_usuario
       INNER JOIN PUBLICACION_FILTRO pf ON pf.id_publicacion = p.id
       INNER JOIN FILTRO f ON f.id = pf.id_filtro
-      WHERE (u.id = ? || a.id_usuario = ?) && f.id = ? ORDER BY p.fecha;`;
+      WHERE (u.id = ? || a.id_usuario = ?) && f.id = ? ORDER BY p.fecha DESC;`;
       db.connection.query(query, [this.id_user, this.id_user, this.id_filter], (err, result) => {
         if (err) {
           reject(err);

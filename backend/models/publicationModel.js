@@ -45,7 +45,7 @@ class publicationModel {
       const query = `select p.*, u.nombre, u.apellido, u.correo from PUBLICACION p
       LEFT JOIN AMIGO a ON a.id_amigo = p.id_usuario
       INNER JOIN USUARIO u ON u.id = p.id_usuario
-      WHERE u.id = ? || a.id_usuario = ? ORDER BY p.fecha;`;
+      WHERE u.id = ? || a.id_usuario = ? ORDER BY p.fecha DESC;`;
       db.connection.query(query, [this.id_user, this.id_user], (err, result) => {
         if (err) {
           reject(err);
