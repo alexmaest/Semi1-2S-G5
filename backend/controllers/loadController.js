@@ -2,7 +2,7 @@ const s3 = require("@aws-sdk/client-s3");
 require("dotenv").config();
 
 const client = new s3.S3Client({
-  region: process.env.AWS_BUCKET_REGION,
+  region: process.env.AWS_REGION_ACCESS_KEY,
   credentials: {
     accessKeyId: process.env.AWS_PUBLIC_KEY,
     secretAccessKey: process.env.AWS_SECRET_KEY,
