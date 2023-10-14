@@ -63,6 +63,11 @@
 
 .publicacion-container{
     overflow-y: auto;
+    margin-top: 50px;
+}
+
+.filtros-container{
+    margin-bottom: 30px;
 }
 
 .publicacion{
@@ -107,6 +112,14 @@
     font-weight: 200;
     font-style: italic;
     font-size: small;
+}
+
+.list-filter{
+    background: transparent;
+    border: 1px solid transparent;
+    color: white;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 200;
 }
 
 .list-opcion{
