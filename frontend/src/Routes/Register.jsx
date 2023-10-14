@@ -159,6 +159,13 @@ class Register extends Component {
                   onChange={this.handleImageChange}
                 />
               </div>
+              <div className="mb-3 center-img">
+                <img
+                  src={this.state.profilePhoto}
+                  alt="Vista previa de la imagen"
+                  style={{ maxWidth: '100%', maxHeight: '200px'}}
+                />
+              </div>
               <button
                 type="submit"
                 className="btn btn-primary w-100"

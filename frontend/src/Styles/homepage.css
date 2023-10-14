@@ -61,15 +61,30 @@
     width: 100%;
 }
 
+.maincointainer2 {
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+    width: 100%;
+    overflow-y: auto;
+}
+
 .maincointainer {
     display: flex;
     flex-direction: column;
     width: 100%;
+    overflow-y: auto;
 }
 
 .logincointainer{
     min-height: 80vh; 
     color: white; 
+}
+
+.logincointainer2{
+    max-height: 70vh;
+    color: white;
+    margin-bottom: 200px;
 }
 
 .registercointainer{
@@ -153,4 +168,9 @@
     background-color: #7851A9;
     color: white;
     margin-top: 10px;
+}
+
+.center-img{
+    display: flex;
+    justify-content: center;
 }

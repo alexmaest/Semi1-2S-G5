@@ -15,7 +15,6 @@ const videoConstraints = {
 class Recognition extends Component {
   state = {
     email: "",
-    password: "",
     image: "",
   };
 
@@ -25,25 +24,45 @@ class Recognition extends Component {
   capture() {
     const imageSrc = this.webcamRef.current.getScreenshot();
     this.setState({ image: imageSrc });
-    console.log(imageSrc);
+    //console.log(imageSrc);
   }
+
+  handleChange = (event) => {
+    const { id, value } = event.target;
+    this.setState({ [id]: value });
+  };
 
   handleSubmit = async (event) => {
     event.preventDefault(); // Evitar que el formulario se envíe de forma predeterminada
+    const { email, image } = this.state;
+
+    console.log("Hola el correo es");
+    console.log(email);
     console.log("Hola la imagen es");
-    console.log(this.state.image);
+    console.log(image);
   };
 
   render() {
     const { image } = this.state;
 
     return (
-      <div className="maincointainer bglogin">
+      <div className="maincointainer2 bglogin">
         <Brandvar />
-        <div className="logincointainer container-fluid d-flex justify-content-between align-items-center">
+        <div className="logincointainer2 container-fluid d-flex align-items-center">
           <div className="col-md-4 offset-md-4 p-5 mainlogin">
             <h2 className="text-center mb-4 tipografia1">Iniciar Sesión</h2>
             <form className="tipografia2" onSubmit={this.handleSubmit}>
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label">
+                  Correo
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="email"
+                  onChange={this.handleChange}
+                />
+              </div>
               <div className="mb-3">
                 
               <div className="webcam-container">
@@ -76,8 +95,6 @@ class Recognition extends Component {
                         }
                     </div>
                 </div>
-
-
               </div>
               <button
                 type="submit"
