@@ -5,6 +5,7 @@ const app = express();
 const morgan = require('morgan');
 
 const mainRoute = require('./routers/mainRoute');
+const userRoute = require('./routers/userRoute');
 const loginRoute = require('./routers/loginRoute');
 const publicationRoute = require('./routers/publicationRoute');
 const commentRoute = require('./routers/commentRoute');
@@ -23,12 +24,12 @@ app.use(cors());
 
 app.use('/', mainRoute);
 app.use('/login', loginRoute);
+app.use('/user', userRoute);
 app.use('/publication', publicationRoute);
 app.use('/comment', commentRoute);
 app.use('/translator', translateRoute);
 app.use('/filter', filterRoute);
 app.use('/register', registerRoute);
 //app.use('/admin', adminRoute);
-//app.use('/user', userRoute);
 
 module.exports = app;

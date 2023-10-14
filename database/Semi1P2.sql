@@ -33,7 +33,7 @@ create table PUBLICACION(
 id int primary key auto_increment,
 descripcion varchar(250),
 imagen varchar(100),
-fecha varchar(100),
+fecha date,
 id_usuario int,
 foreign key (id_usuario) references USUARIO(id)
 );

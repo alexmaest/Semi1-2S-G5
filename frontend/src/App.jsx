@@ -3,6 +3,7 @@ import Home from "./Routes/Home";
 import Login from "./Routes/Login";
 import Register from "./Routes/Register";
 import Recognition from "./Routes/Recognition";
+import MainPage from "./Routes/Mainpage";
 
 function App() {
   const router = createBrowserRouter([
@@ -24,6 +25,11 @@ function App() {
     {
       path: "/reconocimiento",
       element: <Recognition />,
+      errorElement: <h1>404 Not Found</h1>,
+    },
+    {
+      path: "/inicio",
+      element: <MainPage />,
       errorElement: <h1>404 Not Found</h1>,
     }
   ]);
