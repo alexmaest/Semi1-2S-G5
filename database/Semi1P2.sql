@@ -60,6 +60,17 @@ foreign key (id_publicacion) references PUBLICACION(id),
 foreign key (id_filtro) references FILTRO(id)
 );
 
+DROP FUNCTION IF EXISTS InsertarPublicacion;
+
+DELIMITER //
+CREATE FUNCTION InsertarPublicacion (descripcion varchar(250), imagen varchar(100), fecha varchar(100), id_usuario int) RETURNS INT
+BEGIN
+    -- Inserta la publicacion
+    INSERT INTO PUBLICACION (descripcion, imagen, fecha, id_usuario) VALUES (descripcion, imagen, fecha, id_usuario);
+    RETURN LAST_INSERT_ID();
+END //
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS InsertarFiltro;
 
 DELIMITER //

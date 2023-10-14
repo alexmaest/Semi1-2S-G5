@@ -1,6 +1,6 @@
 const loadController = require('./loadController');
 const userModel = require('../models/userModel');
-
+const cognitoService = require('../services/cognitoService');
 class registerController {
     constructor() { }
 
@@ -26,6 +26,28 @@ class registerController {
                 }else{
                     res.status(500).json({ message: 'An error has occurred while uploading the profile photo' });
                 }
+            }
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+    }
+
+    async confirmSignUp(req, res) {
+        try {
+            const { email, code } = req.body;
+            const user = new userModel(null, null, null, null, email, null, null);
+            const userByEmail = await user.getByEmail();
+            if (userByEmail) {
+                const cognito = new cognitoService();
+                const success = await cognito.confirmSignUp(email, code);
+                if (success) {
+                    res.status(200).json({ message: 'Account confirmed' });
+                } else {
+                    res.status(500).json({ message: 'Failed account confirmation' });
+                }
+            } else {
+                res.status(404).json({ message: 'Account not found' });
             }
         } catch (err) {
             console.error(err);
