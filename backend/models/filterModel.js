@@ -32,6 +32,7 @@ class filterModel {
         if (err) {
           reject(err);
         } else {
+          result.forEach((element) => {element.fecha = element.fecha.toLocaleDateString()});
           resolve(result);
         }
       });
