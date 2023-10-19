@@ -125,3 +125,35 @@
 .list-opcion{
     background-color: black;
 }
+
+.comentario{
+    margin-bottom: 5px;
+}
+
+.ver-comentarios{ 
+    background: transparent; 
+    color: white; 
+    border: transparent
+}
+
+.ocultar-comentarios{
+    background: transparent;
+    border: 1px solid transparent;
+    color: white;
+    border-radius: 10px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 200;
+    font-style: italic;
+    font-size: small;
+}
+
+.comments-container{
+    background-color: black;
+}
+
+.cuadro-comentario{
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+    margin-top: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
