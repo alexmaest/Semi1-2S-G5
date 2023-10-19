@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@aws-sdk/client-lex-runtime-v2": "^3.431.0",
     "@aws-sdk/client-rekognition": "^3.427.0",
     "@aws-sdk/client-s3": "^3.427.0",
     "@aws-sdk/client-translate": "^3.421.0",

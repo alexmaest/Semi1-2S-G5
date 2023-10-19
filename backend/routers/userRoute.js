@@ -5,6 +5,7 @@ const userController = require('../controllers/userController');
 
 router.get('/id/:id', userController.findUserById);
 router.get('/email/:email', userController.findUserByEmail);
+
 // friends routes
 router.get('/friends/added/:id', userController.friendsAdded);
 router.get('/friends/notAdded/:id', userController.friendsNotAdded);
@@ -16,5 +17,8 @@ router.get('/requests/received/:id', userController.getRequestReceived);
 router.post('/request/send', userController.requestSend);
 router.post('/request/accepted/:id', userController.requestAccepted);
 router.post('/request/denied/:id', userController.requestDenied);
+
+// chatBot 
+router.post('/message', userController.message);
 
 module.exports = router;

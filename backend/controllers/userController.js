@@ -1,5 +1,6 @@
 const requestModel = require('../models/requestModel');
 const userModel = require('../models/userModel');
+const chatBotModel = require('../models/chatBotModel');
 
 class userController {
     constructor() { }
@@ -164,6 +165,25 @@ class userController {
             res.status(500).json({ message: 'Internal Server Error' });
         }
     }
+
+    async message(req, res) {
+        try {
+            const { message } = req.body;
+            const socialBot = new chatBotModel('uniqueId', message);
+            socialBot.singleMessage((error, chatResponse) => {
+                if (error) {
+                    console.error(error);
+                    res.status(500).json({ message: 'Failed ChatBot Response' });
+                } else {
+                    res.status(200).json({ response: chatResponse });
+                }
+            });
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+    }
+    
 }
 
 module.exports = new userController();
