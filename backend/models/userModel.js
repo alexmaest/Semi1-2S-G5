@@ -54,6 +54,18 @@ class userModel {
               {
                 Name: 'custom:psw',
                 Value: this.password
+              },
+              {
+                Name: 'custom:nombre',
+                Value: this.firstName
+              },
+              {
+                Name: 'custom:apellido',
+                Value: this.lastName
+              },
+              {
+                Name: 'custom:dpi',
+                Value: this.dpi
               }
             ]);
             if (success) {
