@@ -3,6 +3,8 @@ const AWS = require('aws-sdk');
 const crypto = require('crypto');
 
 const config = {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID_COGNITO,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_COGNITO,
     apiVersion: process.env.AWS_API_VERSION_COGNITO,
     region: process.env.AWS_REGION_COGNITO,
 }
@@ -48,10 +50,10 @@ class CognitoService {
         try {
             let data = await this.cognitoIdentity.initiateAuth(params).promise();
             console.log(data);
-            return {success: true, data: data};
+            return { success: true, data: data };
         } catch (error) {
             console.log(error)
-            return {success: false, data: error};
+            return { success: false, data: error };
         }
     }
 
@@ -107,6 +109,55 @@ class CognitoService {
             console.log(error);
             return false;
         }
+    }
+
+    async getAttributes(username) {
+        const params = {
+            UserPoolId: process.env.AWS_USER_POOL_ID_COGNITO,
+            Username: username,
+        };
+        return new Promise((resolve, reject) => {
+            this.cognitoIdentity.adminGetUser(params, (err, data) => {
+                if (err) {
+                    console.error('Error al recuperar los atributos del usuario:', err);
+                    reject(err);
+                } else {
+                    // data.UserAttributes contiene los atributos del usuario
+                    const userAttributes = data.UserAttributes;
+                    // Encuentra el atributo que deseas (por ejemplo, 'picture')
+                    const pictureAttribute = userAttributes.find((attr) => attr.Name === 'picture');
+    
+                    if (pictureAttribute) {
+                        const pictureUrl = pictureAttribute.Value;
+                        console.log('URL de la imagen:', pictureUrl);
+                        resolve(pictureUrl);
+                    } else {
+                        console.log('Atributo de imagen no encontrado');
+                        resolve(null);
+                    }
+                }
+            });
+        });
+    }
+
+    async getAllAttributes(username) {
+        const params = {
+            UserPoolId: process.env.AWS_USER_POOL_ID_COGNITO,
+            Username: username,
+        };
+        return new Promise((resolve, reject) => {
+            this.cognitoIdentity.adminGetUser(params, (err, data) => {
+                if (err) {
+                    console.error('Error al recuperar los atributos del usuario:', err);
+                    reject(err);
+                } else {
+                    // data.UserAttributes contiene los atributos del usuario
+                    const userAttributes = data.UserAttributes;
+                    // Encuentra el atributo que deseas (por ejemplo, 'picture')
+                    resolve(userAttributes);
+                }
+            });
+        });
     }
 }
 
