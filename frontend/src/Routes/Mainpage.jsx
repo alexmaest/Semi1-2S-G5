@@ -15,7 +15,9 @@ class MainPage extends Component {
     filtros: [{id: -1, nombre: 'Todo'}],
     filter_search: '',
     comments_window: [],
-    label: true
+    label: true,
+    newPost_description: '',
+    newPost_image: ''
   };
 
   componentDidMount() {
@@ -157,6 +159,81 @@ class MainPage extends Component {
     this.setState({ comments_window: arreglo });
   }
 
+  newPost = async () => {
+    const descripcion = this.state.newPost_description;
+    const imagen = this.state.newPost_image;
+
+    if(descripcion != '' && imagen != '') {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      const formattedDate = `${year}-${month}-${day}`;
+
+      const response = await fetch(api + "/publication/save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          description: descripcion,
+          image: imagen,
+          date: formattedDate,
+          id_user: user,
+        }),
+      });
+
+      const respuesta = await response.json();
+
+      console.log(respuesta);
+      
+      try {
+        const response = await fetch(api + "/publication/friendsPosts/" + user + "/");
+        const data = await response.json();
+        this.setState({ publicaciones: data.data });
+        this.setState({ comments_window: [] });
+        const arreglo = [];
+        for(var i = 0; i < data.data.length; i++) {
+          arreglo.push(false);
+        }
+        this.setState({ comments_window: arreglo });
+      } catch (error) {
+        console.error('Error al cargar publicaciones luego de crear:', error);
+      }
+
+      this.setState({ newPost_description: '' });
+      this.setState({ newPost_image: '' });
+    }
+    else{
+      alert('Por favor llena todos los campos');
+    }
+
+  }
+
+  Cancell = () => {
+
+    this.setState({ newPost_description: '' });
+    this.setState({ newPost_image: '' });
+
+  }
+
+  handleNewPostChange = (event) => {
+    const { id, value } = event.target;
+    this.setState({ [id]: value });
+  };
+
+  handleImageChange = (event) => {
+    const imageFile = event.target.files[0];
+
+    if (imageFile) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.setState({ newPost_image: e.target.result });
+      };
+      reader.readAsDataURL(imageFile);
+    }
+  };
+
   render() {
     return (
         <div className="publi-bg container-fluid d-flex">
@@ -173,6 +250,29 @@ class MainPage extends Component {
                       </option>
                     ))}
                   </select>
+                </div>
+                <div className="container-fluid publicacion">
+                  <input type="text" className="form-control" id="newPost_description" placeholder="¿Qué quieres publicar?" value={this.state.newPost_description} onChange={this.handleNewPostChange}/>
+                  <div style={{marginTop: '10px', marginBottom: '10px'}}>
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="newPost_image"
+                    accept="image/*"
+                    onChange={this.handleImageChange}
+                  />
+                  </div>
+                  {this.state.newPost_image && <div className="mb-3 center-img">
+                    <img
+                      src={this.state.newPost_image}
+                      alt="Vista previa de la imagen"
+                      style={{ maxWidth: '100%', maxHeight: '200px'}}
+                    />
+                  </div>}
+                  <div className="center-img">
+                    <button className="btn btn-primary esquina" style={{ backgroundColor: '#3c0068', color: 'white', border: 'transparent'}} onClick={this.newPost}>Publicar</button>
+                    <button className="btn btn-primary" style={{ backgroundColor: '#800020', color: 'white', border: 'transparent'}} onClick={this.Cancell}>Cancelar</button>
+                  </div>
                 </div>
                 {this.state.publicaciones.map((publicacion, index) => (
                   <div key={index}>
