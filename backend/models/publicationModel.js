@@ -42,11 +42,18 @@ class publicationModel {
 
   getFriendPosts() {
     return new Promise((resolve, reject) => {
-      const query = `select distinct p.*, u.nombre, u.apellido, u.correo from PUBLICACION p
-      LEFT JOIN AMIGO a ON a.id_amigo = p.id_usuario
-      INNER JOIN USUARIO u ON u.id = p.id_usuario
-      WHERE u.id = ? || a.id_usuario = ? ORDER BY p.fecha DESC;`;
-      db.connection.query(query, [this.id_user, this.id_user], (err, result) => {
+      const query = `select p.*, u.nombre, u.apellido, u.correo from PUBLICACION p
+      INNER JOIN ( 
+      (SELECT id_amigo as id FROM AMIGO WHERE id_usuario = ?)
+      UNION
+      (SELECT id_usuario as id FROM AMIGO WHERE id_amigo = ?)
+      UNION 
+      SELECT ? as id)  a 
+      ON a.id = p.id_usuario
+      INNER JOIN USUARIO u ON u.id = a.id
+      ORDER BY p.fecha desc;
+      `;
+      db.connection.query(query, [this.id_user, this.id_user, this.id_user], (err, result) => {
         if (err) {
           reject(err);
         } else {
