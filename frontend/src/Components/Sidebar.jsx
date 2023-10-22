@@ -23,31 +23,31 @@ class Sidebar extends Component {
                 <nav>
                     <ul className="noliststyle">
                     <li className="side-list-options">
-                        <Link to={""} className="sideitems">
+                        <Link to={"/inicio"} className="sideitems">
                         <AiFillHome className="sideicon"/> {" "}|
                         Inicio
                         </Link>
                     </li>
                     <li className="side-list-options">
-                        <Link to={""} className="sideitems">
+                        <Link to={"/perfil"} className="sideitems">
                         <CgProfile className="sideicon"/>{" "}|
                         Perfil
                         </Link>
                     </li>
                     <li className="side-list-options">
-                        <Link to={""} className="sideitems">
+                        <Link to={"/friends"} className="sideitems">
                         <LiaUserFriendsSolid className="sideicon" /> {" "}|
                         Amigos
                         </Link>
                     </li>
                     <li className="side-list-options">
-                        <Link to={""} className="sideitems">
+                        <Link to={"/chat"} className="sideitems">
                         <BsChatSquareDotsFill className="sideicon" /> {" "}|
                         Chat
                         </Link>
                     </li>
                     <li className="side-list-options">
-                        <Link to={""} className="sideitems">
+                        <Link to={"/bot"} className="sideitems">
                         <GoDependabot className="sideicon"/> {" "}|
                         Bot
                         </Link>

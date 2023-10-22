@@ -161,3 +161,85 @@
 .esquina {
     margin-right: 10px;
 }
+
+.titulo-seccion{
+    font-size: x-large;
+    margin-top: 20px;
+}
+
+.alter-seccion{
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 200;
+    font-style: italic;
+    font-size: medium;
+}
+
+.solicitud{
+    height: 80px;
+}
+
+.nombre-solicitud{
+    font-weight: 400;
+    font-size: large;
+    align-items: center;
+}
+
+.foto-solicitud{
+    margin-right: 15px;
+}
+
+.profile-container{
+    overflow-y: auto;
+    margin-top: 50px;
+}
+
+.profile-foto{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.profile{
+    margin-bottom: 50px;
+}
+
+.form-field{
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+}
+
+.chat-field{
+    padding-left: 20cap;
+    padding-right: 20cap;
+    margin-bottom: 10px;
+    padding-bottom: 0px;
+}
+
+.message {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20cap;
+    padding-right: 20cap;
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+  }
+  
+.bot-solicitud {
+    background-color: rgb(58, 56, 56);
+    color: white;
+}
+  
+.bot-respuesta {
+    background-color: rgb(0, 0, 0);
+    color: white;
+}
+
+.chat-general-container{
+    overflow-y: auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    height: 100%;
+}
+
+.ask-bar{
+    margin-bottom: 50px;
+}

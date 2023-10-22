@@ -5,7 +5,7 @@ import Comentarios from "../Components/Comentarios";
 import { FaComment } from "react-icons/fa6";
 
 const api = import.meta.env.VITE_API;
-const user = '1';
+const user = '30';
 
 class MainPage extends Component {
 
@@ -239,7 +239,7 @@ class MainPage extends Component {
         <div className="publi-bg container-fluid d-flex">
             <Sidebar />
             <div className="container-fluid d-flex flex-column align-items-center publicacion-container">
-              <div className="col-md-6">
+              <div className="col-md-6" style={{marginBottom: '50px'}}>
                 <div className="container-fluid d-flex filtros-container">
                   <input type="text" className="form-control" placeholder="Buscar etiquetas" id="filter_search" onChange={this.handleFormChange}/>
                   <button className="btn btn-primary" style={{ backgroundColor: '#7851A9', color: 'white', border: 'transparent'}} onClick={this.WordFilter}>Buscar</button>
