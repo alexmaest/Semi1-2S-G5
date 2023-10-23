@@ -16,6 +16,7 @@ class Recognition extends Component {
   state = {
     email: "",
     image: "",
+    camera: false
   };
 
   webcamRef = React.createRef();
@@ -42,6 +43,11 @@ class Recognition extends Component {
     console.log(image);
   };
 
+  ActivarCamara = () => {
+    const estado = this.state.camera;
+    this.setState({ camera: !estado });
+  }
+
   render() {
     const { image } = this.state;
 
@@ -65,7 +71,7 @@ class Recognition extends Component {
               </div>
               <div className="mb-3">
                 
-              <div className="webcam-container">
+              {this.state.camera && <div className="webcam-container">
                     <div className="text-center">
 
                     {image === '' ? (
@@ -94,7 +100,8 @@ class Recognition extends Component {
                             }}>Capturar</button>
                         }
                     </div>
-                </div>
+                </div>}
+                <button className="btn btn-primary w-100" style={{ backgroundColor: '#7851A9', color: 'white', border: 'transparent', marginTop:'10px'}} onClick={this.ActivarCamara}>Activar Camara</button>
               </div>
               <button
                 type="submit"
