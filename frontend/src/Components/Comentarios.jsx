@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 
 const api = import.meta.env.VITE_API;
+const user = sessionStorage.getItem('id');
 
 class Comentarios extends Component {
 
     state = {
         comentarios: [],
         idioma: 'es',
+        newComment: ''
       };
 
     componentDidMount() {
@@ -35,7 +37,7 @@ class Comentarios extends Component {
           if (idioma) {
             //alert(`Opción seleccionada: ${idioma} ${descripcion}`);
             
-            const response = await fetch(api + "/translator/", {
+            const response = await fetch("https://ftd58w0lef.execute-api.us-east-1.amazonaws.com/prod/traducir", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -63,10 +65,51 @@ class Comentarios extends Component {
         this.props.CloseComments(index);
     }
 
+    handleCommenthange = (event) => {
+      const { id, value } = event.target;
+      this.setState({ [id]: value });
+    };
+
+    CreateComment = async () => {
+      const comment = this.state.newComment;
+
+      if (comment != ''){
+        const response = await fetch(api + "/comment/save", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            content: comment,
+            id_user: user,
+            id_post: this.props.id
+          }),
+        });
+
+        const respuesta = await response.json();
+
+        console.log(respuesta);
+        
+        try {
+          const response = await fetch(api + "/comment/post/" + this.props.id + "/");
+          const data = await response.json();
+          this.setState({ comentarios: data.data });
+        } catch (error) {
+          console.error('Error al crear nuevo comentarios:', error);
+        }
+      }
+
+      this.setState({ newComment: '' });
+    };
+
     render() {
         const { id, CloseComments, index } = this.props;
       return (
         <div className="container-fluid">
+            <div className="container-fluid d-flex comments-container">
+              <input type="text" className="form-control" id="newComment" placeholder="Escribe un comentario" value={this.state.newComment} onChange={this.handleCommenthange}/>
+              <button className="btn btn-primary" style={{ backgroundColor: '#7851A9', color: 'white', border: 'transparent'}} onClick={this.CreateComment}>Publicar</button>
+            </div>
             <div className="container-fluid d-flex">
                 <button className="ocultar-comentarios" onClick={() => this.CloseComments(index)}>ocultar comentarios</button>
             </div>

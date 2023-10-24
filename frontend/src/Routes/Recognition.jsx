@@ -16,6 +16,7 @@ class Recognition extends Component {
   state = {
     email: "",
     image: "",
+    camera: false
   };
 
   webcamRef = React.createRef();
@@ -36,11 +37,47 @@ class Recognition extends Component {
     event.preventDefault(); // Evitar que el formulario se envíe de forma predeterminada
     const { email, image } = this.state;
 
+    try {
+      const response = await fetch(api + "/login/image", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: email,
+          imageLoggingBase64: image,
+        }),
+      });
+
+      
+
+      if (response.ok) {
+
+        const data = await response.json();
+
+        alert("Todo OK");
+        sessionStorage.setItem("token", data.token);
+        sessionStorage.setItem("id", data.id_User);
+        window.location.href = "/inicio";
+
+      } else {
+        alert("Error en el inicio de sesión, revisa los campos");
+      }
+
+    } catch (error) {
+      console.error('Error al logearse con imagen', error);
+    }
+
     console.log("Hola el correo es");
     console.log(email);
     console.log("Hola la imagen es");
     console.log(image);
   };
+
+  ActivarCamara = () => {
+    const estado = this.state.camera;
+    this.setState({ camera: !estado });
+  }
 
   render() {
     const { image } = this.state;
@@ -51,7 +88,7 @@ class Recognition extends Component {
         <div className="logincointainer2 container-fluid d-flex align-items-center">
           <div className="col-md-4 offset-md-4 p-5 mainlogin">
             <h2 className="text-center mb-4 tipografia1">Iniciar Sesión</h2>
-            <form className="tipografia2" onSubmit={this.handleSubmit}>
+            <div className="tipografia2">
               <div className="mb-3">
                 <label htmlFor="email" className="form-label">
                   Correo
@@ -65,7 +102,7 @@ class Recognition extends Component {
               </div>
               <div className="mb-3">
                 
-              <div className="webcam-container">
+              {this.state.camera && <div className="webcam-container">
                     <div className="text-center">
 
                     {image === '' ? (
@@ -94,16 +131,18 @@ class Recognition extends Component {
                             }}>Capturar</button>
                         }
                     </div>
-                </div>
+                </div>}
+                <button className="btn btn-primary w-100" style={{ backgroundColor: '#7851A9', color: 'white', border: 'transparent', marginTop:'10px'}} onClick={this.ActivarCamara}>Activar Camara</button>
               </div>
               <button
                 type="submit"
                 className="btn btn-primary w-100"
                 style={{ background: "#003d7a" }}
+                onClick={this.handleSubmit}
               >
                 Ingresar
               </button>
-            </form>
+            </div>
             <p className="text-center mt-3">
               <Link to={"/login"} style={{ color: "#8E24AA" }}>
                 Credenciales

@@ -23,15 +23,22 @@ class filterModel {
   getFriendsPostsFilter() {
     return new Promise((resolve, reject) => {
       const query = `select distinct p.*, u.nombre, u.apellido, u.correo from PUBLICACION p
-      LEFT JOIN AMIGO a ON a.id_amigo = p.id_usuario
-      INNER JOIN USUARIO u ON u.id = p.id_usuario
+      INNER JOIN ( 
+      (SELECT id_amigo as id FROM AMIGO WHERE id_usuario = ?)
+      UNION
+      (SELECT id_usuario as id FROM AMIGO WHERE id_amigo = ?)
+      UNION 
+      SELECT ? as id)  a 
+      ON a.id = p.id_usuario
+      INNER JOIN USUARIO u ON u.id = a.id
       INNER JOIN PUBLICACION_FILTRO pf ON pf.id_publicacion = p.id
       INNER JOIN FILTRO f ON f.id = pf.id_filtro
-      WHERE (u.id = ? || a.id_usuario = ?) && f.id = ? ORDER BY p.fecha DESC;`;
-      db.connection.query(query, [this.id_user, this.id_user, this.id_filter], (err, result) => {
+      WHERE f.id = ? ORDER BY p.fecha desc;`;
+      db.connection.query(query, [this.id_user, this.id_user, this.id_user, this.id_filter], (err, result) => {
         if (err) {
           reject(err);
         } else {
+          result.forEach((element) => {element.fecha = element.fecha.toLocaleDateString()});
           resolve(result);
         }
       });

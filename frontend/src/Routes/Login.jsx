@@ -22,29 +22,30 @@ class Login extends Component {
 
     const { email, password } = this.state;
 
-    let url = `${api}/login/${email}/${password}`;
-
-    const userdata = {
-      email,
-      password,
-    };
 
     //Fetch para enviar la información
 
     try {
-      const solicitud = await fetch(url, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" }
+      const solicitud = await fetch(api + "/login/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
       });
+
       if (solicitud.ok) {
         alert("Todo OK");
+        const data = await solicitud.json();
+        sessionStorage.setItem("token", data.token);
+        sessionStorage.setItem("id", data.id_User);
+        window.location.href = "/inicio";
+
       } else {
-        try {
-          const errorresponse = await solicitud.json();
-          alert(errorresponse.message);
-        } catch (error) {
-          alert("Error obtener la respuesta");
-        }
+        alert("Error en el inicio de sesión, revisa los campos");
       }
     } catch (error) {
       alert("Error en el inicio de sesión, revisa los campos");

@@ -4,6 +4,10 @@ import Login from "./Routes/Login";
 import Register from "./Routes/Register";
 import Recognition from "./Routes/Recognition";
 import MainPage from "./Routes/Mainpage";
+import Friends from "./Routes/Friends";
+import Chat from "./Routes/Chat";
+import Profile from "./Routes/Profile";
+import Bot from "./Routes/Bot";
 
 function App() {
   const router = createBrowserRouter([
@@ -30,6 +34,26 @@ function App() {
     {
       path: "/inicio",
       element: <MainPage />,
+      errorElement: <h1>404 Not Found</h1>,
+    },
+    {
+      path: "/friends",
+      element: <Friends />,
+      errorElement: <h1>404 Not Found</h1>,
+    },
+    {
+      path: "/chat",
+      element: <Chat />,
+      errorElement: <h1>404 Not Found</h1>,
+    },
+    {
+      path: "/perfil",
+      element: <Profile />,
+      errorElement: <h1>404 Not Found</h1>,
+    },
+    {
+      path: "/bot",
+      element: <Bot />,
       errorElement: <h1>404 Not Found</h1>,
     }
   ]);
