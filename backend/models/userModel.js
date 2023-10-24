@@ -99,10 +99,45 @@ class userModel {
     });
   }  
 
-  update() {
+  update(user) {
     return new Promise((resolve, reject) => {
-      const query = 'UPDATE user SET ? WHERE id_user = ?';
-      db.connection.query(query, [this.firstName, this.id_user], (err, result) => {
+      let query = 'UPDATE Semi1.USUARIO SET ';
+      const values = [];
+
+      // Comprobar y agregar campos no nulos
+      if (user.firstName !== null) {
+        query += 'Nombre = ?, ';
+        values.push(user.firstName);
+      }
+
+      if (user.lastName !== null) {
+        query += 'Apellido = ?, ';
+        values.push(user.lastName);
+      }
+
+      if (user.profilePhoto !== null) {
+        query += 'Src = ?, ';
+        values.push(user.profilePhoto);
+      }
+
+      if (user.email !== null) {
+        query += 'Correo = ?, ';
+        values.push(user.email);
+      }
+
+      if (user.password !== null) {
+        query += 'Psw = ?, ';
+        values.push(user.password);
+      }
+
+      // Eliminar la última coma y espacio
+      query = query.slice(0, -2);
+
+      // Agregar la condición WHERE
+      query += ' WHERE Id = ? ;';
+      values.push(user.id_user);
+
+      db.connection.query(query, values, (err, result) => {
         if (err) {
           reject(err);
         } else {

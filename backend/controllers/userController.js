@@ -36,6 +36,30 @@ class userController {
         }
     }
 
+    async updateUser(req, res) {
+        try {
+            const { id_user, firstName, lastName, email, password, profilePhoto } = req.body;
+            const user = new userModel(id_user, firstName, lastName, email, password, null);
+            //Cambios para recibir base64 en la imagen de perfil
+            if (profilePhoto != null) {
+                const imageUrl = await loadController.uploadImage(profilePhoto);
+                if (imageUrl) {
+                    user.profilePhoto = imageUrl;
+                }
+            }
+            
+            const userUpdated = await user.update(user);
+            if (userUpdated) {
+                res.status(200).json({ message: 'User updated' });
+            } else {
+                res.status(500).json({ message: 'An error has occurred while uploading the User' });
+            }
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+    }
+
     async friendsAdded(req, res) {
         try {
             const userId = req.params.id;
