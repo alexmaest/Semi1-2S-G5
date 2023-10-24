@@ -4,7 +4,8 @@ import { AiFillSetting } from "react-icons/ai";
 
 
 const api = import.meta.env.VITE_API;
-const user = '30';
+const user = sessionStorage.getItem('id');
+const token = sessionStorage.getItem('token');
 
 class Profile extends Component {
 
@@ -21,6 +22,11 @@ class Profile extends Component {
     };
 
     componentDidMount() {
+        if (token == null || token == '') {
+            alert('No has iniciado sesión')
+            window.location.href = "/";
+        }
+
         async function getData() {
             //perfil
             try {
@@ -96,7 +102,7 @@ class Profile extends Component {
             var apellido = '';
             var dpi = '';
             var correo = '';
-            var password = '';
+            var newpassword = '';
             var foto = '';
             
             if(this.state.newName == ''){
@@ -124,9 +130,9 @@ class Profile extends Component {
             }
 
             if(this.state.newPassword == ''){
-                password = antigua;
+                newpassword = antigua;
             }else{
-                password = this.state.newPassword;
+                newpassword = this.state.newPassword;
             }
 
             if(this.state.newImage == ''){
@@ -140,7 +146,7 @@ class Profile extends Component {
             console.log(apellido);
             console.log(dpi);
             console.log(correo);
-            console.log(password);
+            console.log(newpassword);
             console.log(foto);
         }
     }

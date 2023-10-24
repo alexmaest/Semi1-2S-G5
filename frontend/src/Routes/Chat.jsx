@@ -4,7 +4,8 @@ import { PiChatTeardropDotsBold } from "react-icons/pi";
 
 
 const api = import.meta.env.VITE_API;
-const user = '30';
+const user = sessionStorage.getItem('id');
+const token = sessionStorage.getItem('token');
 
 class Chat extends Component {
 
@@ -13,6 +14,11 @@ class Chat extends Component {
     };
 
     componentDidMount() {
+        if (token == null || token == '') {
+            alert('No has iniciado sesión')
+            window.location.href = "/";
+        }
+
         async function getData() {
             //usuarios amigos
             try {

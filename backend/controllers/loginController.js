@@ -19,7 +19,7 @@ class LoginController {
                 const result = await cognito.signInUser(email, password);
                 if (result.success) {
                     const token = jwt.sign({ email, password }, process.env.AUTH_KEY, { expiresIn: '1h' });
-                    res.status(200).json({ id_User: userByEmail.id_User, token: token, message: 'Successful request' });
+                    res.status(200).json({ id_User: userByEmail.id, token: token, message: 'Successful request' });
                 } else {
                     res.status(501).json({ message: result.data });
                 }
@@ -69,7 +69,7 @@ class LoginController {
                 if (result) {
                     const password = userAttributes.find((attr) => attr.Name === 'custom:psw');
                     const token = jwt.sign({ email, password }, process.env.AUTH_KEY, { expiresIn: '1h' });
-                    res.status(200).json({ id_User: userByEmail.id_User, token: token, message: 'Successful request' });
+                    res.status(200).json({ id_User: userByEmail.id, token: token, message: 'Successful request' });
                     // res.status(200).json({ message: 'Successful request' });
                 } else {
                     res.status(501).json({ message: result });

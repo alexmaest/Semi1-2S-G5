@@ -10,6 +10,7 @@ import { RiLogoutBoxRLine } from "react-icons/ri";
 class Sidebar extends Component {
     Logout = () => {
         alert("Logout");
+        sessionStorage.clear();
     };
 
     render() {

@@ -5,7 +5,8 @@ import Comentarios from "../Components/Comentarios";
 import { FaComment } from "react-icons/fa6";
 
 const api = import.meta.env.VITE_API;
-const user = '30';
+const user = sessionStorage.getItem('id');
+const token = sessionStorage.getItem('token');
 
 class MainPage extends Component {
 
@@ -21,6 +22,11 @@ class MainPage extends Component {
   };
 
   componentDidMount() {
+    if (token == null || token == '') {
+      alert('No has iniciado sesión')
+      window.location.href = "/";
+    }
+
     async function getPublicaciones() {
       try {
         const response = await fetch(api + "/publication/friendsPosts/" + user + "/");
@@ -103,10 +109,12 @@ class MainPage extends Component {
     const palabra = this.state.filter_search
     if (palabra == '') {
       try {
-        const response = await fetch(api + "/publication/friendsPosts/" + user + "/");
+        const response = await fetch(api + "/filter/");
         const data = await response.json();
-        this.setState({ publicaciones: data.data });
-        this.setState({label: true});
+        this.setState({ filtros: [{id: -1, nombre: 'Todo'}] });
+        this.setState(prevState => ({
+          filtros: [...prevState.filtros, ...data.data],
+        }));
       } catch (error) {
         console.error('Error al cargar publicaciones:', error);
       }
@@ -115,8 +123,10 @@ class MainPage extends Component {
       try {
         const response = await fetch(api + "/filter/search/" + palabra + "/");
         const data = await response.json();
-        this.setState({ publicaciones: data.data });
-        this.setState({label: false});
+        this.setState({ filtros: [{id: -1, nombre: 'Todo'}] });
+        this.setState(prevState => ({
+          filtros: [...prevState.filtros, ...data.data],
+        }));
       } catch (error) {
         console.error('Error al cargar publicaciones:', error);
       }
@@ -129,7 +139,7 @@ class MainPage extends Component {
       if (idioma) {
         //alert(`Opción seleccionada: ${idioma} ${descripcion}`);
         
-        const response = await fetch(api + "/translator/", {
+        const response = await fetch("https://ftd58w0lef.execute-api.us-east-1.amazonaws.com/prod/traducir", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -178,7 +188,7 @@ class MainPage extends Component {
         body: JSON.stringify({
           description: descripcion,
           image: imagen,
-          date: formattedDate,
+          date: today,
           id_user: user,
         }),
       });

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import Sidebar from "../Components/Sidebar";
-import { PiChatTeardropDotsBold } from "react-icons/pi";
 
 
 const api = import.meta.env.VITE_API;
-const user = '30';
+const user = sessionStorage.getItem('id');
+const token = sessionStorage.getItem('token');
 
 class Bot extends Component {
 
@@ -14,7 +14,10 @@ class Bot extends Component {
     };
 
     componentDidMount() {
-
+        if (token == null || token == '') {
+            alert('No has iniciado sesión')
+            window.location.href = "/";
+        }      
     }
 
     sendMessage = async () => {

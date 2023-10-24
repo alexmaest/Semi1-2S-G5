@@ -5,7 +5,8 @@ import { FaCheck } from "react-icons/fa6";
 
 
 const api = import.meta.env.VITE_API;
-const user = '30';
+const user = sessionStorage.getItem('id');
+const token = sessionStorage.getItem('token');
 
 class Friends extends Component {
 
@@ -16,6 +17,11 @@ class Friends extends Component {
     };
 
     componentDidMount() {
+        if (token == null || token == '') {
+            alert('No has iniciado sesión')
+            window.location.href = "/";
+        }  
+        
         async function getData() {
             //usuarios no amigos
             try {

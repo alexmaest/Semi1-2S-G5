@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 const api = import.meta.env.VITE_API;
-const user = '1';
+const user = sessionStorage.getItem('id');
 
 class Comentarios extends Component {
 
@@ -37,7 +37,7 @@ class Comentarios extends Component {
           if (idioma) {
             //alert(`Opción seleccionada: ${idioma} ${descripcion}`);
             
-            const response = await fetch(api + "/translator/", {
+            const response = await fetch("https://ftd58w0lef.execute-api.us-east-1.amazonaws.com/prod/traducir", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
