@@ -8,6 +8,7 @@ import Friends from "./Routes/Friends";
 import Chat from "./Routes/Chat";
 import Profile from "./Routes/Profile";
 import Bot from "./Routes/Bot";
+import Confirm from "./Routes/Confirm";
 
 function App() {
   const router = createBrowserRouter([
@@ -19,6 +20,11 @@ function App() {
     {
       path: "/login",
       element: <Login />,
+      errorElement: <h1>404 Not Found</h1>,
+    },
+    {
+      path: "/confirmar",
+      element: <Confirm />,
       errorElement: <h1>404 Not Found</h1>,
     },
     {
