@@ -5,7 +5,7 @@ import Footer from "../Components/Footer";
 
 const api = import.meta.env.VITE_API;
 
-class Login extends Component {
+class Confirm extends Component {
   state = {
     email: "",
     password: "",
@@ -26,29 +26,27 @@ class Login extends Component {
     //Fetch para enviar la información
 
     try {
-      const solicitud = await fetch(api + "/login/", {
+      const solicitud = await fetch(api + "/register/confirm", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
           email: email,
-          password: password,
+          code: password,
         }),
       });
 
       if (solicitud.ok) {
-        alert("Todo OK");
+        alert("Cuenta confirmada");
         const data = await solicitud.json();
-        sessionStorage.setItem("token", data.token);
-        sessionStorage.setItem("id", data.id_User);
-        window.location.href = "/inicio";
+        window.location.href = "/login";
 
       } else {
-        alert("Error en el inicio de sesión, revisa los campos");
+        alert("Error al confimar la cuenta, revisa los campos");
       }
     } catch (error) {
-      alert("Error en el inicio de sesión, revisa los campos");
+      alert("Error al confimar la cuenta, revisa los campos");
     }
   };
 
@@ -58,7 +56,7 @@ class Login extends Component {
         <Brandvar />
         <div className="logincointainer container-fluid d-flex justify-content-between align-items-center">
           <div className="col-md-4 offset-md-4 p-5 mainlogin">
-            <h2 className="text-center mb-4 tipografia1">Iniciar Sesión</h2>
+            <h2 className="text-center mb-4 tipografia1">Confirma tu cuenta</h2>
             <form className="tipografia2" onSubmit={this.handleSubmit}>
               <div className="mb-3">
                 <label htmlFor="email" className="form-label">
@@ -73,10 +71,10 @@ class Login extends Component {
               </div>
               <div className="mb-3">
                 <label htmlFor="password" className="form-label">
-                  Contraseña
+                  Codigo
                 </label>
                 <input
-                  type="password"
+                  type="text"
                   className="form-control"
                   id="password"
                   onChange={this.handleChange}
@@ -87,20 +85,9 @@ class Login extends Component {
                 className="btn btn-primary w-100"
                 style={{ background: "#003d7a" }}
               >
-                Ingresar
+                Confirmar
               </button>
             </form>
-            <p className="text-center mt-3">
-              <Link to={"/reconocimiento"} style={{ color: "#8E24AA" }}>
-                Reconocimeinto Facial
-              </Link>
-            </p>
-            <p className="text-center mt-3">
-              Confirma tu cuenta{" "}
-              <Link to={"/confirmar"} style={{ color: "#8E24AA" }}>
-                Confirmar
-              </Link>
-            </p>
             <p className="text-center mt-3">
               ¿Nuevo Por Acá?{" "}
               <Link to={"/registrarse"} style={{ color: "#8E24AA" }}>
@@ -115,4 +102,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default Confirm;
