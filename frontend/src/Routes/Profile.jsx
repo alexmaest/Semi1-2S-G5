@@ -92,12 +92,20 @@ class Profile extends Component {
         const correo_antiguo = this.state.usuario.correo;
         const foto_antigua = this.state.usuario.foto;
 
-
-        if(antigua != revisar){
-            alert("Contraseña incorrecta");
-        }else{
-
-            //revisar que el nuevo valor no este vacio de lo contrario usar el anterior
+        try {
+            const solicitud = await fetch(api + "/login/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                email: correo_antiguo,
+                password: revisar,
+              }),
+            });
+      
+            if (solicitud.ok) {
+              //revisar que el nuevo valor no este vacio de lo contrario usar el anterior
             var nombre = '';
             var apellido = '';
             var dpi = '';
@@ -148,7 +156,13 @@ class Profile extends Component {
             console.log(correo);
             console.log(newpassword);
             console.log(foto);
-        }
+      
+            } else {
+              alert("Error en modificar perfil, revisa los campos");
+            }
+          } catch (error) {
+            alert("Error en modificar perfil, revisa los campos");
+          }
     }
 
     render() {
@@ -202,10 +216,6 @@ class Profile extends Component {
                                             {this.state.usuario.correo}
                                         </div>
                                         {this.state.edit && <div className="form-field">
-                                            <input type="text" className="form-control" id="newEmail" placeholder="Editar correo" onChange={this.handleFormChange}/>
-                                        </div>}
-                                        {this.state.edit && <div className="form-field">
-                                            <input type="password" className="form-control" id="newPassword" placeholder="Nueva contraseña" onChange={this.handleFormChange}/>
                                             <input type="password" className="form-control" id="checkPassword" placeholder="Contraseña anterior" style={{marginTop: '10px'}} onChange={this.handleFormChange}/>
                                             <div className="center-img" style={{marginTop: '10px'}}>
                                                 <button className="btn btn-primary esquina" style={{ backgroundColor: '#3c0068', color: 'white', border: 'transparent'}} onClick={this.UpdateProfile}>Actualizar</button>
