@@ -156,6 +156,39 @@ class Profile extends Component {
             console.log(correo);
             console.log(newpassword);
             console.log(foto);
+
+            const response = await fetch(api + "/user", {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  id_user: user,
+                  firstName: nombre,
+                  lastName: apellido,
+                  dpi: dpi,
+                  email: correo,
+                  password: antigua,
+                  profilePhoto: foto,
+                }),
+              });
+
+              if (response.ok) {
+                alert("Perfil modificado correctamente");
+                try {
+                    const response = await fetch(api + "/user/id/" + user);
+                    const data = await response.json();
+                    this.setState({ usuario: data.user });
+                    console.log(this.state.usuario);
+                    this.EnableEdit();
+                  } catch (error) {
+                    console.error('Error al cargar perfil:', error);
+                  }
+              }
+              else{
+                alert("Error en modificar perfil, revisa los campos");
+              }
+
       
             } else {
               alert("Error en modificar perfil, revisa los campos");
