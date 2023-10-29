@@ -1,5 +1,5 @@
 require('dotenv').config();
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 class Database {
     constructor() {
@@ -7,7 +7,7 @@ class Database {
             host: process.env.DB_HOST,
             user: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
-            ssh: "Amazon RDS",
+            //ssh: "Amazon RDS",
             port:3306,
             database: process.env.DB_NAME,
             multipleStatements: true

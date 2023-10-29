@@ -5,6 +5,7 @@ import Sidebar from "../Components/Sidebar";
 const api = import.meta.env.VITE_API;
 const user = sessionStorage.getItem('id');
 const token = sessionStorage.getItem('token');
+var isDPI = false;
 
 class Bot extends Component {
 
@@ -24,24 +25,48 @@ class Bot extends Component {
         const entrada = this.state.inputMessage;
         const registro = this.state.chatMessages;
         if (entrada !== '') {
-            var botresponse = '';
-            try {
-                const response = await fetch(api + "/user/message", {
-                    method: "POST",
-                    headers: {
-                    "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        message: entrada
-                    }),
-                });
-                const data = await response.json();
-                botresponse = data.response
-              } catch (error) {
-                console.error('Error al cargar bot:', error);
-              }
-
-            this.setState({ chatMessages: [...registro, { text: entrada }, {text: botresponse}] });
+            if (entrada === 'dpi') {
+                isDPI = true;
+                var botresponse = 'Ingresa tu nuevo DPI';
+                this.setState({ chatMessages: [...registro, { text: entrada }, {text: botresponse}] });
+            } else if (isDPI) {
+                isDPI = false;
+                var botresponse = 'Tu DPI ha sido actualizado';
+                try {
+                    const response = await fetch(api + "/user/dpi", {
+                        method: "POST",
+                        headers: {
+                        "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            id: user,
+                            dpi: entrada
+                        }),
+                    });
+                    const data = await response.json();
+                } catch (error) {
+                    console.error('Error al cargar bot:', error);
+                }
+                this.setState({ chatMessages: [...registro, { text: entrada }, {text: botresponse}] });
+            } else {
+                var botresponse = '';
+                try {
+                    const response = await fetch(api + "/user/message", {
+                        method: "POST",
+                        headers: {
+                        "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            message: entrada
+                        }),
+                    });
+                    const data = await response.json();
+                    botresponse = data.response
+                } catch (error) {
+                    console.error('Error al cargar bot:', error);
+                }
+                this.setState({ chatMessages: [...registro, { text: entrada }, {text: botresponse}] });
+            }
         }
 
         this.setState({ inputMessage: '' });
