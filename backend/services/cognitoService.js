@@ -16,6 +16,27 @@ class CognitoService {
         this.cognitoIdentity = new AWS.CognitoIdentityServiceProvider(config)
     }
 
+
+    async updateUserAttributes(username, userAttributes) {
+        const params = {
+            UserPoolId: process.env.AWS_USER_POOL_ID_COGNITO,
+            Username: username,
+            UserAttributes: userAttributes
+        };
+
+        return new Promise((resolve, reject) => {
+            this.cognitoIdentity.adminUpdateUserAttributes(params, (err, data) => {
+                if (err) {
+                    console.error('Error al actualizar los atributos del usuario:', err);
+                    reject(err);
+                } else {
+                    console.log('Atributos de usuario actualizados con éxito:', data);
+                    resolve(true);
+                }
+            });
+        });
+    }
+
     async singUpUser(userName, userPassword, userAttr) {
 
         const params = {
@@ -126,7 +147,7 @@ class CognitoService {
                     const userAttributes = data.UserAttributes;
                     // Encuentra el atributo que deseas (por ejemplo, 'picture')
                     const pictureAttribute = userAttributes.find((attr) => attr.Name === 'picture');
-    
+
                     if (pictureAttribute) {
                         const pictureUrl = pictureAttribute.Value;
                         console.log('URL de la imagen:', pictureUrl);

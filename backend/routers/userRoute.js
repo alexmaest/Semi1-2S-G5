@@ -21,4 +21,7 @@ router.post('/request/denied/:id', userController.requestDenied);
 // chatBot 
 router.post('/message', userController.message);
 
+// user routes
+router.put('/', userController.updateUser);
+
 module.exports = router;

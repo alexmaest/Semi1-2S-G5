@@ -106,28 +106,33 @@ class userModel {
 
       // Comprobar y agregar campos no nulos
       if (user.firstName !== null) {
-        query += 'Nombre = ?, ';
+        query += 'nombre = ?, ';
         values.push(user.firstName);
       }
 
       if (user.lastName !== null) {
-        query += 'Apellido = ?, ';
+        query += 'apellido = ?, ';
         values.push(user.lastName);
       }
 
-      if (user.profilePhoto !== null) {
-        query += 'Src = ?, ';
-        values.push(user.profilePhoto);
+      if (user.dpi !== null){
+        query += 'dpi = ?, ';
+        values.push(user.dpi);
       }
 
       if (user.email !== null) {
-        query += 'Correo = ?, ';
+        query += 'correo = ?, ';
         values.push(user.email);
       }
 
       if (user.password !== null) {
-        query += 'Psw = ?, ';
+        query += 'psw = ?, ';
         values.push(user.password);
+      }
+
+      if (user.profilePhoto !== null) {
+        query += 'foto = ?, ';
+        values.push(user.profilePhoto);
       }
 
       // Eliminar la última coma y espacio

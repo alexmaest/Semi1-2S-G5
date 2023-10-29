@@ -1,6 +1,8 @@
 const requestModel = require('../models/requestModel');
 const userModel = require('../models/userModel');
 const chatBotModel = require('../models/chatBotModel');
+const cognitoService = require('../services/cognitoService');
+const loadController = require('./loadController');
 
 class userController {
     constructor() { }
@@ -39,21 +41,50 @@ class userController {
 
     async updateUser(req, res) {
         try {
-            const { id_user, firstName, lastName, email, password, profilePhoto } = req.body;
-            const user = new userModel(id_user, firstName, lastName, email, password, null);
+            const { id_user, firstName, lastName, dpi, email, password, profilePhoto } = req.body;
+            const user = new userModel(id_user, firstName, lastName, dpi, email, password, null);
             //Cambios para recibir base64 en la imagen de perfil
             if (profilePhoto != null) {
                 const imageUrl = await loadController.uploadImage(profilePhoto);
                 if (imageUrl) {
                     user.profilePhoto = imageUrl;
                 }
-            }
-            
-            const userUpdated = await user.update(user);
-            if (userUpdated) {
-                res.status(200).json({ message: 'User updated' });
             } else {
-                res.status(500).json({ message: 'An error has occurred while uploading the User' });
+                user.profilePhoto = profilePhoto;
+            }
+
+            const cognito = new cognitoService();
+            const cognitoResponse = await cognito.updateUserAttributes(email, [
+                {
+                    Name: 'picture',
+                    Value: user.profilePhoto
+                },
+                {
+                    Name: 'custom:nombre',
+                    Value: user.firstName
+                },
+                {
+                    Name: 'custom:apellido',
+                    Value: user.lastName
+                },
+                {
+                    Name: 'custom:psw',
+                    Value: user.password
+                },
+                {
+                    Name: 'custom:dpi',
+                    Value: user.dpi
+                }
+            ]);
+            if (cognitoResponse) {
+                const userUpdated = await user.update(user);
+                if (userUpdated) {
+                    res.status(200).json({ message: 'User updated' });
+                } else {
+                    res.status(500).json({ message: 'An error has occurred while uploading the User DB' });
+                }
+            } else {
+                res.status(500).json({ message: 'An error has occurred while uploading the User Cognito' });
             }
         } catch (err) {
             console.error(err);
@@ -66,7 +97,7 @@ class userController {
             const userId = req.params.id;
             const user = new userModel(userId, null, null, null, null, null, null);
             const userExist = await user.getById();
-            if (userExist){
+            if (userExist) {
                 const friends = await user.getFriends();
                 res.status(200).json({ friends: friends });
             } else {
@@ -83,7 +114,7 @@ class userController {
             const userId = req.params.id;
             const user = new userModel(userId, null, null, null, null, null, null);
             const userExist = await user.getById();
-            if (userExist){
+            if (userExist) {
                 const notFriends = await user.getNotFriends();
                 res.status(200).json({ notFriends: notFriends });
             } else {
@@ -100,7 +131,7 @@ class userController {
             const { userId, friendId } = req.body;
             const request = new requestModel(null, userId, friendId);
             const requestExist = await request.getByUsersIds();
-            if (requestExist){
+            if (requestExist) {
                 res.status(500).json({ message: 'The request already exist' });
             } else {
                 const response = await request.save();
@@ -117,9 +148,9 @@ class userController {
             const requestId = req.params.id;
             const request = new requestModel(requestId, null, null);
             const requestExist = await request.getById();
-            if (requestExist){
+            if (requestExist) {
                 const response = await request.accept();
-                if (response){
+                if (response) {
                     res.status(200).json({ message: 'Friend request accepted' });
                 } else {
                     res.status(500).json({ message: 'The request was not sent' });
@@ -138,9 +169,9 @@ class userController {
             const requestId = req.params.id;
             const request = new requestModel(requestId, null, null);
             const requestExist = await request.getById();
-            if (requestExist){
+            if (requestExist) {
                 const response = await request.delete();
-                if (response){
+                if (response) {
                     res.status(200).json({ message: 'Friend request denied' });
                 } else {
                     res.status(500).json({ message: 'The request was not sent' });
@@ -159,7 +190,7 @@ class userController {
             const userId = req.params.id;
             const user = new userModel(userId, null, null, null, null, null, null);
             const userExist = await user.getById();
-            if (userExist){
+            if (userExist) {
                 const request = new requestModel(null, userId, null);
                 const requests = await request.getRequestSent();
                 res.status(200).json({ requests: requests });
@@ -177,7 +208,7 @@ class userController {
             const userId = req.params.id;
             const user = new userModel(userId, null, null, null, null, null, null);
             const userExist = await user.getById();
-            if (userExist){
+            if (userExist) {
                 const request = new requestModel(null, userId, null);
                 const requests = await request.getRequestReceived();
                 res.status(200).json({ requests: requests });
@@ -207,7 +238,7 @@ class userController {
             res.status(500).json({ message: 'Internal Server Error' });
         }
     }
-    
+
 }
 
 module.exports = new userController();
