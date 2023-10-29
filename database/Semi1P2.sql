@@ -63,7 +63,7 @@ foreign key (id_filtro) references FILTRO(id)
 DROP FUNCTION IF EXISTS InsertarPublicacion;
 
 DELIMITER //
-CREATE FUNCTION InsertarPublicacion (descripcion varchar(250), imagen varchar(100), fecha varchar(100), id_usuario int) RETURNS INT
+CREATE FUNCTION InsertarPublicacion (descripcion varchar(250), imagen varchar(100), fecha varchar(100), id_usuario int) RETURNS INT DETERMINISTIC
 BEGIN
     -- Inserta la publicacion
     INSERT INTO PUBLICACION (descripcion, imagen, fecha, id_usuario) VALUES (descripcion, imagen, fecha, id_usuario);
