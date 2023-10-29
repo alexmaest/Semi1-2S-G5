@@ -198,6 +198,19 @@ class userModel {
     });
   }
 
+  updateDPI() {
+    return new Promise((resolve, reject) => {
+      const query = 'UPDATE USUARIO SET dpi = ? WHERE id = ?';
+      db.connection.query(query, [this.dpi, this.id_user], (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result.affectedRows > 0);
+        }
+      });
+    });
+  }
+
   generateHash() {
     const saltRounds = 10;
     const hash = bcrypt.hashSync(this.password, saltRounds);

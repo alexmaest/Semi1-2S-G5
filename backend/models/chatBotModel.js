@@ -29,8 +29,12 @@ class ChatBotModel {
         console.log(err, err.stack);
         callback(err, null);
       } else {
-        const message = data.messages[0].content;
-        callback(null, message);
+        if (data.messages !== undefined) {
+            const message = data.messages[0].content;
+            callback(null, message);
+        } else{
+            callback(null, 'No se ha podido obtener una respuesta a su consulta');
+        }
       }
     });
   }

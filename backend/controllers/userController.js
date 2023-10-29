@@ -183,6 +183,23 @@ class userController {
             res.status(500).json({ message: 'Internal Server Error' });
         }
     }
+
+    async updateDpi(req, res) {
+        try {
+            const { id, dpi } = req.body;
+            const user = new userModel(id, null, null, dpi, null, null, null);
+            const userExist = await user.getById();
+            if (userExist){
+                const requests = await user.updateDPI();
+                res.status(200).json({ message: 'DPI updated' });
+            } else {
+                res.status(500).json({ message: 'The user doesn´t exist' });
+            }
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+    }
     
 }
 

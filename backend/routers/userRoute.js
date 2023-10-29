@@ -20,5 +20,6 @@ router.post('/request/denied/:id', userController.requestDenied);
 
 // chatBot 
 router.post('/message', userController.message);
+router.post('/dpi', userController.updateDpi);
 
 module.exports = router;
