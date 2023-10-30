@@ -1,21 +1,5 @@
 version: "3.9"
 services:
-  database:
-    build:
-      context: ./database
-      dockerfile: Dockerfile
-    container_name: database
-    environment:
-      MYSQL_ROOT_PASSWORD: 'Semi_1DBp2'
-      MYSQL_DATABASE: 'Semi1'
-      MYSQL_USER: 'admin'
-      MYSQL_PASSWORD: 'Semi_1DBp2'
-    ports:
-      - "3306:3306"
-    volumes:
-      - informacion:/var/lib/mysql
-    networks:
-      - p_semi
 
   backend:
     restart: "on-failure"
@@ -28,8 +12,6 @@ services:
       DB_HOST: database
     networks:
       - p_semi
-    depends_on:
-      - database
 
   frontend:
     build:
@@ -42,10 +24,6 @@ services:
       - p_semi
     depends_on:
       - backend
-      - database
-
-volumes:
-  informacion:
 
 networks:
   p_semi:

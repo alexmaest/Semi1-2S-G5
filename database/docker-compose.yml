@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  database:
+    build:
+      dockerfile: Dockerfile
+    container_name: database
+    environment:
+      MYSQL_ROOT_PASSWORD: 'Semi_1DBp2'
+      MYSQL_DATABASE: 'Semi1'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'Semi_1DBp2'
+    ports:
+      - "3306:3306"
+    volumes:
+      - informacion:/var/lib/mysql
+
+volumes:
+  informacion:
+
